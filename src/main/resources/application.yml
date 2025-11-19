@@ -1,0 +1,108 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: api-gateway
+  
+  cloud:
+    gateway:
+      # Configuración global de CORS
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - PATCH
+              - OPTIONS
+            allowedHeaders: "*"
+            exposedHeaders:
+              - Authorization
+            maxAge: 3600
+      
+      # Rutas del Gateway
+      routes:
+        # Ruta para autenticación
+        - id: auth-service
+          uri: https://partyst-loadbalancer.onrender.com
+          predicates:
+            - Path=/auth/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: authCircuitBreaker
+                fallbackUri: forward:/fallback/auth
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+        
+        # Ruta para API general
+        - id: api-service
+          uri: https://partyst-loadbalancer.onrender.com
+          predicates:
+            - Path=/api/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: apiCircuitBreaker
+                fallbackUri: forward:/fallback/api
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 20
+                redis-rate-limiter.burstCapacity: 40
+        
+        # Ruta para proyectos
+        - id: projects-service
+          uri: https://partyst-loadbalancer.onrender.com
+          predicates:
+            - Path=/projects/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: projectsCircuitBreaker
+                fallbackUri: forward:/fallback/projects
+        
+        # Ruta para usuarios
+        - id: users-service
+          uri: https://partyst-loadbalancer.onrender.com
+          predicates:
+            - Path=/users/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: usersCircuitBreaker
+                fallbackUri: forward:/fallback/users
+
+      # Configuración de timeouts
+      httpclient:
+        connect-timeout: 5000
+        response-timeout: 30s
+        pool:
+          max-connections: 500
+          max-idle-time: 30s
+
+# Actuator endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway,metrics
+  endpoint:
+    health:
+      show-details: always
+    gateway:
+      enabled: true
+
+# Logging
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
