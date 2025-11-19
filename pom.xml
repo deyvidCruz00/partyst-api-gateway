@@ -36,12 +36,6 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         
-        <!-- Spring Boot Webflux (requerido por Gateway) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-        </dependency>
-        
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>

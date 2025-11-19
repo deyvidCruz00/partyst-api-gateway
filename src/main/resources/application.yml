@@ -31,60 +31,29 @@ spring:
           uri: https://partyst-loadbalancer.onrender.com
           predicates:
             - Path=/auth/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: authCircuitBreaker
-                fallbackUri: forward:/fallback/auth
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
         
         # Ruta para API general
         - id: api-service
           uri: https://partyst-loadbalancer.onrender.com
           predicates:
             - Path=/api/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: apiCircuitBreaker
-                fallbackUri: forward:/fallback/api
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 20
-                redis-rate-limiter.burstCapacity: 40
         
         # Ruta para proyectos
         - id: projects-service
           uri: https://partyst-loadbalancer.onrender.com
           predicates:
             - Path=/projects/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: projectsCircuitBreaker
-                fallbackUri: forward:/fallback/projects
         
         # Ruta para usuarios
         - id: users-service
           uri: https://partyst-loadbalancer.onrender.com
           predicates:
             - Path=/users/**
-          filters:
-            - name: CircuitBreaker
-              args:
-                name: usersCircuitBreaker
-                fallbackUri: forward:/fallback/users
 
       # Configuración de timeouts
       httpclient:
         connect-timeout: 5000
         response-timeout: 30s
-        pool:
-          max-connections: 500
-          max-idle-time: 30s
 
 # Actuator endpoints
 management:
