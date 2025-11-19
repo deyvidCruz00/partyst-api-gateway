@@ -50,10 +50,10 @@ spring:
           predicates:
             - Path=/users/**
 
-      # Configuración de timeouts
+      # Configuración de timeouts (aumentados para cold starts de Render)
       httpclient:
-        connect-timeout: 5000
-        response-timeout: 30s
+        connect-timeout: 15000
+        response-timeout: 90s
 
 # Actuator endpoints
 management:
