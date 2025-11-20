@@ -7,26 +7,6 @@ spring:
   
   cloud:
     gateway:
-      # Configuración global de CORS
-      globalcors:
-        cors-configurations:
-          '[/**]':
-            allowedOrigins:
-              - "https://linkedartistfrontend.onrender.com"
-              - "http://localhost:4200"
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - PATCH
-              - OPTIONS
-            allowedHeaders: "*"
-            allowCredentials: true
-            exposedHeaders:
-              - Authorization
-            maxAge: 3600
-      
       # Rutas del Gateway
       routes:
         # Ruta para autenticación
