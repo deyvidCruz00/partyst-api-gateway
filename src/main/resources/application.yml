@@ -44,6 +44,33 @@ spring:
           filters:
             - AddRequestHeader=X-Gateway-Request, true
             - AddResponseHeader=X-Gateway-Response, true
+        
+        # Ruta para user (singular)
+        - id: user-service
+          uri: https://partyst-loadbalancer.onrender.com
+          predicates:
+            - Path=/user/**
+          filters:
+            - AddRequestHeader=X-Gateway-Request, true
+            - AddResponseHeader=X-Gateway-Response, true
+        
+        # Ruta para tareas
+        - id: task-service
+          uri: https://partyst-loadbalancer.onrender.com
+          predicates:
+            - Path=/task/**
+          filters:
+            - AddRequestHeader=X-Gateway-Request, true
+            - AddResponseHeader=X-Gateway-Response, true
+        
+        # Ruta para notificaciones
+        - id: notifications-service
+          uri: https://partyst-loadbalancer.onrender.com
+          predicates:
+            - Path=/notifications/**
+          filters:
+            - AddRequestHeader=X-Gateway-Request, true
+            - AddResponseHeader=X-Gateway-Response, true
 
       # Configuración de timeouts (aumentados para cold starts de Render)
       httpclient:
