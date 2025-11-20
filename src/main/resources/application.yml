@@ -34,24 +34,36 @@ spring:
           uri: https://partyst-loadbalancer.onrender.com
           predicates:
             - Path=/auth/**
+          filters:
+            - AddRequestHeader=X-Gateway-Request, true
+            - AddResponseHeader=X-Gateway-Response, true
         
         # Ruta para API general
         - id: api-service
           uri: https://partyst-loadbalancer.onrender.com
           predicates:
             - Path=/api/**
+          filters:
+            - AddRequestHeader=X-Gateway-Request, true
+            - AddResponseHeader=X-Gateway-Response, true
         
         # Ruta para proyectos
         - id: projects-service
           uri: https://partyst-loadbalancer.onrender.com
           predicates:
             - Path=/projects/**
+          filters:
+            - AddRequestHeader=X-Gateway-Request, true
+            - AddResponseHeader=X-Gateway-Response, true
         
         # Ruta para usuarios
         - id: users-service
           uri: https://partyst-loadbalancer.onrender.com
           predicates:
             - Path=/users/**
+          filters:
+            - AddRequestHeader=X-Gateway-Request, true
+            - AddResponseHeader=X-Gateway-Response, true
 
       # Configuración de timeouts (aumentados para cold starts de Render)
       httpclient:
